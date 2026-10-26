@@ -1,0 +1,36 @@
+Perto de Mim - Protótipo funcional
+Projeto de IHC - ODS 1: Erradicação da Pobreza (Universidade Presbiteriana Mackenzie)
+
+Grupo:
+Arthur Roldan Slikta - 10353847
+Felipe Haddad - 10437372
+Lucas Brezolini - 10439256
+
+COMO ABRIR
+1. Descompacte o arquivo .zip.
+2. Abra o arquivo index.html em qualquer navegador (Chrome, Edge, Firefox ou Safari),
+   no computador ou no celular. Não precisa instalar nada.
+3. No computador, o aplicativo aparece no tamanho de um celular, no centro da tela.
+
+DADOS PARA TESTE
+- Na primeira tela, toque em "Preencher com dados de exemplo" (CPF 123.456.789-09).
+  Não use seu CPF de verdade. O sistema confere se o CPF é válido e recusa números inventados.
+- Celular: qualquer número com DDD
+- Código SMS: qualquer código de 4 números
+
+O QUE FUNCIONA
+- Cadastro com CPF e celular, com conferência do CPF e código por SMS (simulado)
+- Trabalhos perto de mim: lista com filtros, detalhe, pedido, aceite do contratante,
+  conversa com respostas prontas, texto e áudio (simulado), avaliação e registro de problema
+- Ajuda perto de mim: mapa e lista com filtro por tipo, detalhe, lista de documentos e lembrete
+- Meus direitos: 4 perguntas, indicação de benefícios e CRAS mais próximo com documentos
+- Aprender: cursos curtos que o celular lê em voz alta e opção de salvar
+- Meus trabalhos, Lembretes e Ajustes (tamanho da letra e alto contraste)
+- Botão "Ouvir" em todas as telas, que lê a tela em voz alta
+- Aviso automático quando o aparelho fica sem internet
+
+OBSERVAÇÕES
+- Todos os trabalhos, pessoas, endereços e instituições são fictícios.
+- Os dados ficam salvos só no navegador de quem está testando.
+- Para recomeçar um teste do zero: Ajustes > "Apagar meus dados e começar de novo".
+- As fontes são carregadas da internet; sem internet, o navegador usa uma fonte parecida.

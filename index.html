@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E6B4D">
+<title>Perto de Mim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+/* Layout: uma coluna de app (máx. 460px) com cabeçalho fixo, conteúdo rolável e barra de navegação embaixo. */
+:root{
+  --bg:#E9EEEA;          /* fundo atrás do app */
+  --surface:#FFFFFF;     /* telas e cartões */
+  --surface-2:#F2F5F2;   /* áreas secundárias */
+  --ink:#16211C;         /* texto principal */
+  --muted:#55645C;       /* texto de apoio */
+  --line:#CBD5CF;        /* bordas */
+  --green:#0E6B4D;       /* marca / trabalho / confiança */
+  --green-soft:#DDEFE6;
+  --sun:#FFC83D;         /* ação principal */
+  --sun-ink:#2A2100;
+  --coral:#C8432F;       /* ajuda perto de mim */
+  --coral-soft:#FBE3DE;
+  --blue:#2457A6;        /* meus direitos */
+  --blue-soft:#DFE8F7;
+  --plum:#6A3F98;        /* aprender */
+  --plum-soft:#ECE3F5;
+  --danger:#B3261E;
+  --ok:#1E7A45;
+  --shadow:0 1px 2px rgba(22,33,28,.08),0 6px 18px rgba(22,33,28,.06);
+  --f-display:"Bricolage Grotesque","Atkinson Hyperlegible",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --fs:17px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1311; --surface:#161E1A; --surface-2:#1E2823; --ink:#EEF3F0; --muted:#A7B5AD; --line:#33413A;
+    --green:#4FC08F; --green-soft:#1C3529; --sun:#FFC83D; --sun-ink:#2A2100;
+    --coral:#F0806B; --coral-soft:#3A221D; --blue:#86AEF0; --blue-soft:#1C2940; --plum:#C3A0EA; --plum-soft:#2C2238;
+    --danger:#FF8A80; --ok:#6CD39A; --shadow:none; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1311; --surface:#161E1A; --surface-2:#1E2823; --ink:#EEF3F0; --muted:#A7B5AD; --line:#33413A;
+  --green:#4FC08F; --green-soft:#1C3529; --sun:#FFC83D; --sun-ink:#2A2100;
+  --coral:#F0806B; --coral-soft:#3A221D; --blue:#86AEF0; --blue-soft:#1C2940; --plum:#C3A0EA; --plum-soft:#2C2238;
+  --danger:#FF8A80; --ok:#6CD39A; --shadow:none; color-scheme:dark;
+}
+/* Alto contraste (ajuste do usuário) */
+:root[data-contrast="alto"]{
+  --bg:#FFFFFF; --surface:#FFFFFF; --surface-2:#FFFFFF; --ink:#000000; --muted:#000000; --line:#000000;
+  --green:#00482F; --green-soft:#FFFFFF; --coral:#8A1A0A; --coral-soft:#FFFFFF; --blue:#0A2E73; --blue-soft:#FFFFFF;
+  --plum:#3E1466; --plum-soft:#FFFFFF; --shadow:none; color-scheme:light;
+}
+:root[data-font="1"]{--fs:19px}
+:root[data-font="2"]{--fs:22px}
+
+[hidden]{display:none!important}
+html,body{height:100%}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:var(--fs);line-height:1.4;-webkit-text-size-adjust:100%}
+button,input,select{font:inherit;color:inherit}
+.shell{height:100%;display:flex;justify-content:center}
+.app{position:relative;width:100%;max-width:460px;height:100%;background:var(--surface);display:flex;flex-direction:column;overflow:hidden}
+@media (min-width:520px){.shell{padding-block:24px}.app{border-radius:28px;box-shadow:0 10px 40px rgba(0,0,0,.18);border:1px solid var(--line)}}
+
+/* Cabeçalho */
+.top{display:flex;align-items:center;gap:8px;padding:12px max(16px,env(safe-area-inset-right,0px)) 12px max(12px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);background:var(--surface);flex:none}
+.top h1{flex:1;min-width:0;margin:0;font-family:var(--f-display);font-weight:700;font-size:1.25em;line-height:1.15;text-wrap:balance}
+.icon-btn{min-width:48px;height:48px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;padding:0 10px;font-weight:700;font-size:.85em}
+.icon-btn svg{width:24px;height:24px}
+.icon-btn.ghost{border-color:transparent}
+.net{background:var(--sun);color:var(--sun-ink);padding:8px 16px;font-size:.85em;font-weight:700;flex:none}
+
+/* Conteúdo */
+.screen{flex:1;overflow-y:auto;padding:18px max(16px,env(safe-area-inset-right,0px)) 28px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:16px;-webkit-overflow-scrolling:touch}
+.screen > *{margin:0;flex-shrink:0}
+.lead{font-family:var(--f-display);font-weight:800;font-size:1.65em;line-height:1.1;letter-spacing:-.01em;text-wrap:balance}
+.muted{color:var(--muted)}
+.small{font-size:.86em}
+h2.sec{font-size:1em;margin:4px 0 -6px;color:var(--muted);font-weight:700}
+
+/* Botões */
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border-radius:16px;border:2px solid var(--line);background:var(--surface);font-weight:700;font-size:1.05em;cursor:pointer;padding:10px 16px;text-align:center;text-decoration:none;color:var(--ink)}
+.btn svg{width:24px;height:24px;flex:none}
+.btn.primary{background:var(--sun);border-color:var(--sun);color:var(--sun-ink)}
+.btn.green{background:var(--green);border-color:var(--green);color:#fff}
+:root[data-theme="dark"] .btn.green{color:#0D1311}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.green{color:#0D1311}}
+.btn.quiet{border-color:transparent;background:var(--surface-2)}
+.btn.danger{color:var(--danger);border-color:var(--danger);background:transparent}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px}.row > *{flex:1;min-width:0}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+/* Campos */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:700}
+.field input{width:100%;min-height:58px;border:2px solid var(--line);border-radius:14px;padding:10px 14px;font-size:1.25em;background:var(--surface);letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.field input[aria-invalid="true"]{border-color:var(--danger)}
+.err{color:var(--danger);font-weight:700;font-size:.95em;display:flex;gap:8px;align-items:flex-start}
+.err svg{width:22px;height:22px;flex:none;margin-top:1px}
+.err-box{display:flex;gap:10px;align-items:flex-start;border:2px solid var(--danger);border-radius:14px;padding:12px 14px;color:var(--danger);font-weight:700}
+.err-box svg{width:24px;height:24px;flex:none}
+.demo{display:flex;flex-direction:column;gap:10px;border:2px dashed var(--line);border-radius:16px;padding:14px}
+.hint{color:var(--muted);font-size:.88em}
+.code{display:flex;gap:10px;justify-content:center}
+.code input{width:62px;height:70px;text-align:center;font-size:1.8em;font-weight:700;border:2px solid var(--line);border-radius:14px;background:var(--surface)}
+
+/* Tela inicial */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:16px;min-height:150px;padding:16px;border-radius:20px;border:2px solid transparent;cursor:pointer;text-align:left;font-weight:700;font-size:1.08em;line-height:1.15}
+.tile .ic{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:var(--surface)}
+.tile .ic svg{width:32px;height:32px}
+.t-work{background:var(--green-soft);color:var(--ink)}.t-work .ic{color:var(--green)}
+.t-help{background:var(--coral-soft)}.t-help .ic{color:var(--coral)}
+.t-rights{background:var(--blue-soft)}.t-rights .ic{color:var(--blue)}
+.t-learn{background:var(--plum-soft)}.t-learn .ic{color:var(--plum)}
+:root[data-contrast="alto"] .tile{border-color:#000}
+
+/* Cartões */
+.card{display:block;width:100%;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:14px 16px;cursor:pointer;color:var(--ink)}
+.card.flat{cursor:default}
+.card .t{font-weight:700;font-size:1.1em}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--muted);font-size:.9em;margin-top:6px}
+.meta span{display:inline-flex;align-items:center;gap:5px}
+.meta svg{width:18px;height:18px}
+.price{font-family:var(--f-display);font-weight:800;font-size:1.6em;line-height:1;color:var(--green);font-variant-numeric:tabular-nums}
+.job-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:.8em;font-weight:700;background:var(--surface-2);color:var(--ink);white-space:nowrap}
+.pill svg{width:16px;height:16px}
+.pill.ok{background:var(--green-soft);color:var(--green)}
+.pill.wait{background:var(--sun);color:var(--sun-ink)}
+.pill.done{background:var(--surface-2);color:var(--muted)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.chip{flex:none;min-height:44px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-weight:700;font-size:.92em}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.trust{display:flex;gap:12px;align-items:center;background:var(--green-soft);border-radius:16px;padding:12px 14px}
+.trust svg{width:30px;height:30px;color:var(--green);flex:none}
+.warn{display:flex;gap:10px;align-items:flex-start;background:var(--surface-2);border-radius:14px;padding:12px 14px;font-size:.9em}
+.warn svg{width:22px;height:22px;flex:none;color:var(--coral)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:10px 14px;align-items:start}
+.kv svg{width:24px;height:24px;color:var(--muted)}
+.banner-ill{border-radius:20px;padding:18px;display:flex;gap:14px;align-items:center}
+.banner-ill svg{width:56px;height:56px;flex:none}
+
+/* Lista de documentos */
+.check{display:flex;align-items:center;gap:14px;min-height:52px;padding:8px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.check input{width:26px;height:26px;accent-color:var(--green);flex:none}
+
+/* Mapa */
+.map{position:relative;width:100%;aspect-ratio:4/3;max-width:100%;border-radius:18px;overflow:hidden;border:1.5px solid var(--line);background:var(--surface-2)}
+.map svg.base{position:absolute;inset:0;width:100%;height:100%}
+.pin{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;background:none;border:0;cursor:pointer;padding:0}
+.pin b{display:flex;width:40px;height:40px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);align-items:center;justify-content:center;color:#fff;border:3px solid var(--surface);box-shadow:var(--shadow)}
+.pin b span{transform:rotate(45deg);font-weight:700}
+.me-dot{position:absolute;width:20px;height:20px;border-radius:50%;background:var(--blue);border:4px solid var(--surface);transform:translate(-50%,-50%);box-shadow:0 0 0 8px color-mix(in srgb,var(--blue) 25%,transparent)}
+
+/* Chat */
+.msgs{display:flex;flex-direction:column;gap:8px}
+.msg{max-width:82%;padding:10px 14px;border-radius:18px;font-size:.98em;line-height:1.35;overflow-wrap:anywhere}
+.msg.them{align-self:flex-start;background:var(--surface-2);border-bottom-left-radius:4px}
+.msg.me{align-self:flex-end;background:var(--green);color:#fff;border-bottom-right-radius:4px}
+:root[data-theme="dark"] .msg.me{color:#0D1311}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .msg.me{color:#0D1311}}
+.msg .time{display:block;font-size:.72em;opacity:.75;margin-top:2px}
+.composer{display:flex;gap:8px;align-items:center}
+.composer input{flex:1;min-width:0;min-height:52px;border:2px solid var(--line);border-radius:26px;padding:8px 16px;background:var(--surface)}
+.round{width:52px;height:52px;border-radius:50%;border:0;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.round svg{width:24px;height:24px}
+.round.send{background:var(--green);color:#fff}
+.round.mic{background:var(--sun);color:var(--sun-ink)}
+.round.mic.rec{background:var(--danger);color:#fff}
+
+/* Avaliação */
+.faces{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.face{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:16px;border:2px solid var(--line);background:var(--surface);cursor:pointer;font-weight:700}
+.face svg{width:44px;height:44px}
+.face[aria-pressed="true"]{border-color:var(--green);background:var(--green-soft)}
+
+/* Questionário */
+.progress{height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--blue);border-radius:5px;transition:width .25s}
+.opt{justify-content:flex-start;text-align:left}
+.opt[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft)}
+
+/* Curso */
+.player{background:var(--plum-soft);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.bar{height:8px;border-radius:4px;background:var(--surface);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--plum)}
+
+/* Confirmação */
+.done{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:18px 8px}
+.done .badge{width:84px;height:84px;border-radius:50%;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center}
+.done .badge svg{width:48px;height:48px}
+
+/* Navegação inferior */
+.nav{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:var(--surface);padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));flex:none}
+.nav button{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:58px;border:0;background:none;cursor:pointer;font-size:.72em;font-weight:700;color:var(--muted);border-radius:12px;padding:6px 2px}
+.nav button svg{width:26px;height:26px}
+.nav button[aria-current="page"]{color:var(--green);background:var(--green-soft)}
+.dot{position:absolute;top:6px;right:calc(50% - 20px);min-width:18px;height:18px;border-radius:9px;background:var(--danger);color:#fff;font-size:.8em;display:flex;align-items:center;justify-content:center;padding:0 4px}
+
+/* Aviso flutuante */
+.toast{position:absolute;left:12px;right:12px;bottom:84px;background:var(--ink);color:var(--surface);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.25);transform:translateY(16px);opacity:0;pointer-events:none;transition:.2s;z-index:5}
+.toast.show{transform:none;opacity:1;pointer-events:auto}
+.toast span{flex:1}
+.toast button{background:var(--sun);color:var(--sun-ink);border:0;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;min-height:44px}
+.toast.top{bottom:auto;top:76px;transform:translateY(-16px)}
+.toast.top.show{transform:none}
+
+/* Ajustes */
+.setting{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.seg{display:flex;border:2px solid var(--line);border-radius:14px;overflow:hidden}
+.seg button{border:0;background:var(--surface);min-width:52px;min-height:48px;cursor:pointer;font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.switch{width:64px;height:36px;border-radius:18px;border:2px solid var(--line);background:var(--surface-2);position:relative;cursor:pointer;flex:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:var(--muted);transition:.15s}
+.switch[aria-checked="true"]{background:var(--green);border-color:var(--green)}
+.switch[aria-checked="true"]::after{left:31px;background:#fff}
+.proto-tag{font-size:.75em;color:var(--muted);text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="shell"><div class="app" id="app">
+  <header class="top" id="top"></header>
+  <div class="net" id="net" hidden>Sem internet agora. Mostrando as informações salvas no celular.</div>
+  <main class="screen" id="screen" tabindex="-1"></main>
+  <nav class="nav" id="nav" aria-label="Menu principal" hidden></nav>
+  <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastBtn" hidden></button></div>
+</div></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- Ícones ---------- */
+const sv=(p,extra='')=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}>${p}</svg>`;
+const IC={
+  back:sv('<path d="M15 5l-7 7 7 7"/>'),
+  home:sv('<path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/>'),
+  sound:sv('<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 010 6M18.5 6.5a7.5 7.5 0 010 11"/>'),
+  stop:sv('<rect x="6" y="6" width="12" height="12" rx="2"/>'),
+  work:sv('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M3 12h18M11 12v2h2v-2"/>'),
+  help:sv('<path d="M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z"/>'),
+  rights:sv('<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>'),
+  learn:sv('<path d="M3 6c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0zM21 6c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z"/>'),
+  pin:sv('<path d="M12 21s-6-6-6-11a6 6 0 0112 0c0 5-6 11-6 11z"/><circle cx="12" cy="10" r="2"/>'),
+  clock:sv('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+  cash:sv('<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/>'),
+  shield:sv('<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>'),
+  star:sv('<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'),
+  check:sv('<path d="M5 12l5 5 9-10"/>'),
+  alert:sv('<path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/>'),
+  send:sv('<path d="M4 12l16-8-6 16-2-7z"/>'),
+  mic:sv('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/>'),
+  bell:sv('<path d="M6 16V11a6 6 0 0112 0v5l2 2H4z"/><path d="M10 20a2 2 0 004 0"/>'),
+  list:sv('<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'),
+  map:sv('<path d="M9 4l-6 2v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>'),
+  route:sv('<circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M6 17V9a4 4 0 014-4h6M18 7v8a4 4 0 01-4 4H8"/>'),
+  gear:sv('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>'),
+  play:sv('<path d="M7 4l13 8-13 8z"/>'),
+  download:sv('<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>'),
+  phone:sv('<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>'),
+  user:sv('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>'),
+  sad:sv('<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8 16c2.5-2 5.5-2 8 0"/>'),
+  meh:sv('<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8 15h8"/>'),
+  happy:sv('<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8 14c2.5 2.5 5.5 2.5 8 0"/>'),
+};
+
+/* ---------- Dados fictícios ---------- */
+const JOBS={
+  caixas:{t:'Descarregar caixas',q:'Mercadinho São Jorge',quem:'Seu Antônio',v:60,dist:400,h:'Hoje, às 10h',hoje:true,dur:'cerca de 2 horas',end:'Rua das Flores, 210 – Vila Esperança',nota:4.8,n:32,desc:'Ajudar a tirar caixas de bebidas e alimentos do caminhão e guardar no estoque. Precisa aguentar peso.',aceita:true},
+  quintal:{t:'Limpar quintal',q:'Seu Márcio',quem:'Seu Márcio',v:80,dist:900,h:'Hoje, às 14h',hoje:true,dur:'cerca de 3 horas',end:'Rua Sete, 45 – Vila Esperança',nota:4.9,n:14,desc:'Tirar mato, varrer e ensacar folhas. As ferramentas são do morador.',aceita:true},
+  muro:{t:'Pintar muro',q:'Dona Célia',quem:'Dona Célia',v:120,dist:1200,h:'Amanhã, às 8h',hoje:false,dur:'cerca de 5 horas',end:'Travessa Boa Vista, 12 – Jardim Alegre',nota:4.5,n:9,desc:'Pintar um muro de 10 metros. A tinta e os rolos já estão comprados.',aceita:false},
+  mudanca:{t:'Ajudar em mudança',q:'Kátia Souza',quem:'Kátia',v:100,dist:2100,h:'Sábado, às 9h',hoje:false,dur:'cerca de 4 horas',end:'Rua do Porto, 300 – Centro',nota:4.7,n:21,desc:'Carregar móveis do apartamento até o caminhão. Prédio com elevador.',aceita:false},
+};
+const PONTOS={
+  ong:{t:'ONG Pão Nosso',tipo:'comida',o:'Distribuição de cestas básicas',dist:800,h:'Hoje, às 14h',quando:'hoje 14:00',e:'Rua das Acácias, 120 – Vila Esperança',docs:['RG ou CPF','Comprovante de endereço'],x:64,y:30,upd:'há 2 dias',obs:'Chegue com 30 minutos de antecedência. São 80 cestas.'},
+  cozinha:{t:'Cozinha Solidária do Bairro',tipo:'comida',o:'Almoço gratuito',dist:1300,h:'Segunda a sexta, das 11h30 às 13h',quando:'amanhã 11:30',e:'Praça Central, s/n',docs:['Nenhum documento necessário'],x:28,y:62,upd:'ontem',obs:'Pode levar a família.'},
+  igreja:{t:'Igreja do Bairro',tipo:'roupas',o:'Doação de roupas e cobertores',dist:1500,h:'Sábado, das 9h às 12h',quando:'sábado 09:00',e:'Av. Central, 455',docs:['Nenhum documento necessário'],x:22,y:24,upd:'há 5 dias',obs:'Tem roupa de criança.'},
+  abrigo:{t:'Abrigo Municipal',tipo:'abrigo',o:'Pernoite e refeição',dist:2300,h:'Todos os dias, 24 horas',quando:'hoje 18:00',e:'Rua do Porto, 30 – Centro',docs:['Qualquer documento com foto'],x:78,y:74,upd:'ontem',obs:'Vagas por ordem de chegada a partir das 18h.'},
+};
+const TIPOS={comida:['Comida','var(--coral)'],roupas:['Roupas','var(--plum)'],abrigo:['Abrigo','var(--blue)']};
+const CURSOS={
+  curriculo:{t:'Como montar um currículo simples',f:'Áudio',min:5,txt:'Neste curso você vai aprender a montar um currículo simples. Primeiro, coloque seu nome completo e um telefone que você atende. Depois, escreva os trabalhos que já fez, mesmo os bicos, como ajudante de obra ou carga e descarga. Por último, diga o que você sabe fazer bem, como pintura, limpeza ou entregas.'},
+  pintura:{t:'Pintura de paredes: o básico',f:'Vídeo leve',min:12,txt:'Antes de pintar, limpe a parede e cubra o chão. Passe massa nos buracos e lixe. Comece pelos cantos com o pincel e depois use o rolo, sempre no mesmo sentido. Espere secar antes da segunda demão.'},
+  mei:{t:'Como abrir um MEI',f:'Áudio',min:8,txt:'O MEI é o jeito mais simples de trabalhar por conta própria com CNPJ. A abertura é gratuita, pelo site gov.br. Com o MEI você paga uma taxa por mês e tem direito a aposentadoria e auxílio-doença.'},
+};
+const Q=[
+  {k:'pessoas',p:'Quantas pessoas moram na sua casa, contando com você?',o:[['1','1'],['2','2'],['3','3'],['4','4'],['5','5 ou mais']]},
+  {k:'renda',p:'Somando todo mundo, quanto a família ganha por mês?',o:[['600','Até R$ 600'],['1500','De R$ 601 a R$ 1.500'],['3000','De R$ 1.501 a R$ 3.000'],['9999','Mais de R$ 3.000']]},
+  {k:'criancas',p:'Tem criança ou adolescente (até 17 anos) em casa?',o:[['sim','Sim'],['nao','Não']]},
+  {k:'idoso',p:'Alguém da casa tem 65 anos ou mais, ou tem alguma deficiência?',o:[['sim','Sim'],['nao','Não']]},
+];
+
+/* ---------- Estado ---------- */
+const KEY='perto-de-mim-v1';
+const fresh=()=>({logado:false,cpf:'',tel:'',code:'',cand:{},chats:{},aval:{},lembretes:[],resp:{},docs:{},cursos:{},local:'',filtro:'perto',vista:'mapa',tipo:'todos',seen:{}});
+let S=fresh();
+let prefs={font:'0',contraste:false};
+try{const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw);S=Object.assign(fresh(),d.S||{});prefs=Object.assign(prefs,d.prefs||{});}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({S,prefs}));}catch(e){}}
+function applyPrefs(){const r=document.documentElement;r.setAttribute('data-font',prefs.font);if(prefs.contraste)r.setAttribute('data-contrast','alto');else r.removeAttribute('data-contrast');}
+applyPrefs();
+
+let cur=S.logado?'inicio':'boasvindas',stack=[],jobSel='caixas',pontoSel='ong',cursoSel='curriculo',qIdx=0;
+const app=document.getElementById('app'),screen=document.getElementById('screen'),top=document.getElementById('top'),nav=document.getElementById('nav');
+
+/* ---------- Utilidades ---------- */
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const km=m=>m<1000?`${m} m`:`${(m/1000).toFixed(1).replace('.',',')} km`;
+const walk=m=>`${Math.max(2,Math.round(m/80))} min a pé`;
+const money=v=>'R$ '+v.toFixed(2).replace('.',',');
+const now=()=>{const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');};
+function cpfValido(c){if(!/^\d{11}$/.test(c)||/^(\d)\1{10}$/.test(c))return false;let s=0;for(let i=0;i<9;i++)s+=+c[i]*(10-i);let d=(s*10)%11%10;if(d!==+c[9])return false;s=0;for(let i=0;i<10;i++)s+=+c[i]*(11-i);d=(s*10)%11%10;return d===+c[10];}
+function mask(v,t){if(!v)return'';if(t==='cpf')return v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})\.(\d{3})(\d)/,'$1.$2.$3').replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/,'$1.$2.$3-$4');return v.replace(/^(\d{2})(\d)/,'($1) $2').replace(/(\d{5})(\d{1,4})$/,'$1-$2');}
+
+let tTimer;
+function toast(msg,label,fn,pos){const t=document.getElementById('toast'),b=document.getElementById('toastBtn');document.getElementById('toastMsg').textContent=msg;t.classList.toggle('top',pos==='top');if(label){b.hidden=false;b.textContent=label;b.onclick=()=>{t.classList.remove('show');fn();};}else b.hidden=true;t.classList.add('show');clearTimeout(tTimer);tTimer=setTimeout(()=>t.classList.remove('show'),label?6000:3200);}
+
+let speaking=false;
+function falar(texto){
+  try{
+    if(!('speechSynthesis' in window))throw 0;
+    if(speaking){speechSynthesis.cancel();speaking=false;renderTop();return;}
+    const u=new SpeechSynthesisUtterance(texto||screen.innerText);u.lang='pt-BR';u.rate=.95;
+    u.onend=u.onerror=()=>{speaking=false;renderTop();};
+    speechSynthesis.cancel();speechSynthesis.speak(u);speaking=true;renderTop();
+  }catch(e){toast('Este aparelho não tem leitura em voz alta.');}
+}
+function pararFala(){try{if(speaking){speechSynthesis.cancel();speaking=false;}}catch(e){}}
+
+function go(id){pararFala();if(cur!==id)stack.push(cur);cur=id;render(true);}
+function back(){pararFala();cur=stack.pop()||'inicio';render(true);}
+function home(){pararFala();stack=[];cur='inicio';render(true);}
+function tab(id){pararFala();stack=[];cur=id;render(true);}
+
+function addLembrete(id,titulo,quando){if(!S.lembretes.find(l=>l.id===id)){S.lembretes.push({id,titulo,quando});save();}}
+function delLembrete(id){S.lembretes=S.lembretes.filter(l=>l.id!==id);save();}
+const temLembrete=id=>!!S.lembretes.find(l=>l.id===id);
+const pedidosAtivos=()=>Object.keys(S.cand).filter(k=>S.cand[k]==='enviado'||S.cand[k]==='aceito');
+const naoVistos=()=>Object.keys(S.cand).filter(k=>S.cand[k]==='aceito'&&!S.seen[k]).length;
+
+/* ---------- Telas ---------- */
+const V={};
+
+V.boasvindas=()=>({title:'Perto de Mim',noBack:true,noNav:true,html:`
+  <div class="banner-ill" style="background:var(--green-soft)">${sv('<circle cx="12" cy="10" r="3"/><path d="M12 21s-7-6-7-11a7 7 0 0114 0c0 5-7 11-7 11z"/>','style="color:var(--green)"')}
+  <p class="lead" style="margin:0">Trabalho, ajuda e seus direitos, perto de você.</p></div>
+  <p class="muted" style="margin:0">Para entrar, só precisa do CPF e do número do celular. Sem formulário grande.</p>
+  <div class="field"><label for="cpf">Seu CPF</label>
+    <input id="cpf" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" value="${mask(S.cpf,'cpf')}" aria-describedby="cpfErr">
+    <div class="err" id="cpfErr" hidden>${IC.alert}<span id="cpfErrTxt"></span></div></div>
+  <div class="field"><label for="tel">Seu celular com DDD</label>
+    <input id="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(11) 90000-0000" value="${mask(S.tel,'tel')}" aria-describedby="telErr">
+    <div class="err" id="telErr" hidden>${IC.alert}<span id="telErrTxt"></span></div>
+    <div class="hint">Vamos mandar um código por SMS para confirmar.</div></div>
+  <div class="err-box" id="resumoErr" role="alert" hidden>${IC.alert}<span>Confira o que está em vermelho acima e toque de novo no botão.</span></div>
+  <button class="btn primary" id="bCad">Receber código por SMS</button>
+  <div class="demo"><p class="small" style="margin:0"><b>Está testando o protótipo?</b> Não use seu CPF de verdade. Toque abaixo para preencher com dados de exemplo.</p>
+  <button class="btn quiet" id="bDemo">Preencher com dados de exemplo</button></div>`,
+  after(){
+    const cpf=document.getElementById('cpf'),tel=document.getElementById('tel'),b=document.getElementById('bCad');
+    const setErr=(campo,msg)=>{const box=document.getElementById(campo+'Err'),inp=document.getElementById(campo);if(msg){document.getElementById(campo+'ErrTxt').textContent=msg;box.hidden=false;inp.setAttribute('aria-invalid','true');}else{box.hidden=true;inp.removeAttribute('aria-invalid');}};
+    const limpaTel=v=>{let d=v.replace(/\D/g,'');if(d.length>11&&d.startsWith('55'))d=d.slice(2);if(d.length>11&&d.startsWith('0'))d=d.slice(1);return d.slice(0,11);};
+    cpf.oninput=()=>{S.cpf=cpf.value.replace(/\D/g,'').slice(0,11);cpf.value=mask(S.cpf,'cpf');setErr('cpf');document.getElementById('resumoErr').hidden=true;};
+    tel.oninput=()=>{S.tel=limpaTel(tel.value);tel.value=mask(S.tel,'tel');setErr('tel');document.getElementById('resumoErr').hidden=true;};
+    tel.onchange=tel.oninput;cpf.onchange=cpf.oninput;
+    b.onclick=()=>{
+      S.cpf=cpf.value.replace(/\D/g,'').slice(0,11);S.tel=limpaTel(tel.value);
+      let primeiro=null;
+      if(S.cpf.length<11){setErr('cpf',`Faltam números. O CPF tem 11 números e você digitou ${S.cpf.length}.`);primeiro=primeiro||cpf;}
+      else if(!cpfValido(S.cpf)){setErr('cpf','Esse CPF não é válido. Confira os números. Se está testando, use os dados de exemplo.');primeiro=primeiro||cpf;}
+      else setErr('cpf');
+      if(S.tel.length<10){setErr('tel','Digite o celular com DDD, por exemplo (11) 98765-4321.');primeiro=primeiro||tel;}
+      else setErr('tel');
+      if(primeiro){document.getElementById('resumoErr').hidden=false;primeiro.scrollIntoView({block:'center',behavior:'smooth'});toast('Confira o que está em vermelho.');return;}
+      save();go('codigo');
+    };
+    document.getElementById('bDemo').onclick=()=>{S.cpf='12345678909';S.tel='11987654321';cpf.value=mask(S.cpf,'cpf');tel.value=mask(S.tel,'tel');setErr('cpf');setErr('tel');document.getElementById('resumoErr').hidden=true;b.focus();toast('Dados de exemplo preenchidos. Agora toque em “Receber código por SMS”.');};
+  }});
+
+let reenvio=0,reTimer;
+V.codigo=()=>({title:'Confirmar celular',noNav:true,html:`
+  <p class="lead">Digite o código que chegou por SMS</p>
+  <p class="muted" style="margin:0">Enviamos 4 números para ${mask(S.tel,'tel')}.</p>
+  <div class="code" role="group" aria-label="Código de 4 números">${[0,1,2,3].map(i=>`<input id="c${i}" inputmode="numeric" maxlength="1" aria-label="Número ${i+1}" autocomplete="one-time-code">`).join('')}</div>
+  <div class="err" id="codErr" hidden>${IC.alert}<span>Faltam números no código.</span></div>
+  <button class="btn primary" id="bEnt">Entrar</button>
+  <div class="row"><button class="btn quiet" id="bRe">Reenviar SMS</button><button class="btn quiet" id="bLig">${IC.phone} Receber ligação</button></div>
+  <p class="proto-tag">Protótipo: qualquer código de 4 números funciona.</p>`,
+  after(){
+    const ins=[0,1,2,3].map(i=>document.getElementById('c'+i));
+    ins.forEach((el,i)=>{el.oninput=()=>{el.value=el.value.replace(/\D/g,'').slice(-1);if(el.value&&i<3)ins[i+1].focus();if(ins.every(x=>x.value))entrar();};
+      el.onkeydown=e=>{if(e.key==='Backspace'&&!el.value&&i>0)ins[i-1].focus();};
+      el.onpaste=e=>{const d=(e.clipboardData.getData('text')||'').replace(/\D/g,'').slice(0,4);if(d.length){e.preventDefault();d.split('').forEach((c,k)=>ins[k].value=c);if(d.length===4)entrar();}};});
+    ins[0].focus();
+    function entrar(){if(!ins.every(x=>x.value)){document.getElementById('codErr').hidden=false;return;}S.logado=true;save();stack=[];cur='inicio';render(true);toast('Pronto! Você entrou no Perto de Mim.');}
+    document.getElementById('bEnt').onclick=entrar;
+    const bRe=document.getElementById('bRe');
+    const tick=()=>{if(reenvio>0){bRe.disabled=true;bRe.textContent=`Reenviar em ${reenvio}s`;}else{bRe.disabled=false;bRe.textContent='Reenviar SMS';}};
+    bRe.onclick=()=>{reenvio=30;tick();toast('Código reenviado por SMS.');clearInterval(reTimer);reTimer=setInterval(()=>{reenvio--;const b=document.getElementById('bRe');if(!b){clearInterval(reTimer);return;}tick();if(reenvio<=0)clearInterval(reTimer);},1000);};
+    tick();
+    document.getElementById('bLig').onclick=()=>toast('Você vai receber uma ligação dizendo o código.');
+  }});
+
+V.inicio=()=>{
+  const ativos=pedidosAtivos();const lemb=S.lembretes[0];
+  return {title:'Perto de Mim',noBack:true,html:`
+  <p class="lead">Olá, Roberto! O que você precisa hoje?</p>
+  ${ativos.length?`<button class="card" data-go="pedidos" style="border-color:var(--green)"><span class="pill ${S.cand[ativos[0]]==='aceito'?'ok':'wait'}">${S.cand[ativos[0]]==='aceito'?IC.check+' Trabalho combinado':IC.clock+' Esperando resposta'}</span>
+    <div class="t" style="margin-top:8px">${JOBS[ativos[0]].t}</div><div class="meta"><span>${IC.clock}${JOBS[ativos[0]].h}</span><span>${IC.pin}${km(JOBS[ativos[0]].dist)}</span></div></button>`:''}
+  <div class="tiles">
+    <button class="tile t-work" data-go="trabalhos"><span class="ic">${IC.work}</span>Trabalhos perto de mim</button>
+    <button class="tile t-help" data-go="ajuda"><span class="ic">${IC.help}</span>Ajuda perto de mim</button>
+    <button class="tile t-rights" data-go="direitos"><span class="ic">${IC.rights}</span>Meus direitos</button>
+    <button class="tile t-learn" data-go="aprender"><span class="ic">${IC.learn}</span>Aprender</button>
+  </div>
+  ${lemb?`<button class="card" data-tab="lembretes"><div class="meta" style="margin:0"><span>${IC.bell}Próximo lembrete</span></div><div class="t" style="margin-top:4px">${esc(lemb.titulo)}</div><div class="muted small">${esc(lemb.quando)}</div></button>`:''}
+  <p class="muted small" style="margin:0;display:flex;gap:8px;align-items:center">${sv('<path d="M4 9v6h4l5 4V5L8 9z"/>','style="width:20px;height:20px;flex:none"')} Toque em “Ouvir”, no alto da tela, para escutar o que está escrito.</p>`};
+};
+
+V.local=()=>({title:'Onde você está?',html:`
+  <div class="banner-ill" style="background:var(--blue-soft)">${sv('<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/>','style="color:var(--blue)"')}
+  <p style="margin:0">Para mostrar o que está perto, o aplicativo precisa saber seu bairro. Ninguém mais vê essa informação.</p></div>
+  <button class="btn primary" id="bGps">${IC.pin} Usar minha localização</button>
+  <div class="field"><label for="bairro">Ou digite seu bairro</label><input id="bairro" placeholder="Ex.: Vila Esperança" value="${esc(S.local&&S.local!=='gps'?S.local:'')}"></div>
+  <div class="err" id="bErr" hidden>${IC.alert}<span>Digite o nome do bairro para continuar.</span></div>
+  <button class="btn" id="bBairro">Buscar pelo bairro</button>`,
+  after(){
+    const seguir=()=>{save();const tgt=pendente||'trabalhos';if(stack[stack.length-1]===tgt)stack.pop();cur=tgt;pendente=null;render(true);};
+    document.getElementById('bGps').onclick=()=>{S.local='gps';toast('Localização encontrada: Vila Esperança.');seguir();};
+    document.getElementById('bBairro').onclick=()=>{const v=document.getElementById('bairro').value.trim();if(!v){document.getElementById('bErr').hidden=false;return;}S.local=v;seguir();};
+  }});
+let pendente=null;
+
+V.trabalhos=()=>{
+  let ids=Object.keys(JOBS);
+  if(S.filtro==='perto')ids.sort((a,b)=>JOBS[a].dist-JOBS[b].dist);
+  if(S.filtro==='valor')ids.sort((a,b)=>JOBS[b].v-JOBS[a].v);
+  if(S.filtro==='hoje')ids=ids.filter(i=>JOBS[i].hoje).sort((a,b)=>JOBS[a].dist-JOBS[b].dist);
+  const onde=S.local==='gps'||!S.local?'Vila Esperança':S.local;
+  return {title:'Trabalhos perto de mim',html:`
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span class="muted">${IC.pin.replace('<svg','<svg style="width:18px;height:18px;vertical-align:-3px"')} Perto de <b>${esc(onde)}</b></span><button class="chip" data-act="trocarLocal">Trocar</button></div>
+  <div class="chips" role="group" aria-label="Ordenar trabalhos">
+    ${[['perto','Mais perto'],['valor','Paga mais'],['hoje','Para hoje']].map(([k,l])=>`<button class="chip" aria-pressed="${S.filtro===k}" data-filtro="${k}">${l}</button>`).join('')}
+  </div>
+  ${ids.map(i=>{const j=JOBS[i],st=S.cand[i];return `<button class="card" data-job="${i}">
+    <div class="job-head"><div style="min-width:0"><div class="t">${j.t}</div><div class="muted small">${j.q}</div></div><div class="price">${money(j.v).replace(',00','')}</div></div>
+    <div class="meta"><span>${IC.pin}${km(j.dist)}</span><span>${IC.clock}${j.h}</span><span>${IC.star}${j.nota.toFixed(1).replace('.',',')}</span></div>
+    ${st?`<div style="margin-top:8px"><span class="pill ${st==='aceito'?'ok':st==='concluido'?'done':'wait'}">${st==='aceito'?'Combinado':st==='concluido'?'Feito':'Pedido enviado'}</span></div>`:''}
+  </button>`}).join('')}`};
+};
+
+V.vaga=()=>{const j=JOBS[jobSel],st=S.cand[jobSel];return {title:'Detalhe do trabalho',html:`
+  <div><p class="lead" style="margin:0 0 4px">${j.t}</p><div class="price" style="font-size:2.2em">${money(j.v)}</div><div class="muted small">pago em mãos no final do trabalho</div></div>
+  <div class="kv">${IC.clock}<div><b>${j.h}</b><br><span class="muted">Duração: ${j.dur}</span></div>
+    ${IC.pin}<div><b>${km(j.dist)} daqui</b> <span class="muted">(${walk(j.dist)})</span><br><span class="muted">${j.end}</span></div>
+    ${IC.list}<div>${j.desc}</div></div>
+  <div class="trust">${IC.shield}<div><b>${j.q}</b><br><span class="small">Contratante verificado pela prefeitura · ${IC.star.replace('<svg','<svg style="width:16px;height:16px;vertical-align:-2px"')} ${j.nota.toFixed(1).replace('.',',')} (${j.n} avaliações de trabalhadores)</span></div></div>
+  ${st==='enviado'?`<button class="btn" disabled>Pedido enviado, esperando resposta</button><button class="btn danger" data-act="desistir">Desistir deste trabalho</button>`
+   :st==='aceito'?`<button class="btn green" data-act="abrirChat">Abrir conversa com ${j.quem}</button>`
+   :st==='concluido'?`<button class="btn" disabled>Você já fez este trabalho</button>`
+   :`<button class="btn primary" data-act="candidatar">${IC.work} Quero esse trabalho</button>`}`};};
+
+V.enviada=()=>{const j=JOBS[jobSel],st=S.cand[jobSel];return {title:'Pedido enviado',html:`
+  <div class="done"><div class="badge">${IC.check}</div><p class="lead" style="margin:0">Pedido enviado!</p>
+  <p class="muted" style="margin:0">${j.q} recebeu seu pedido para “${j.t}”. Vamos te avisar aqui quando responder.</p></div>
+  ${st==='aceito'?`<button class="btn green" data-act="abrirChat">Ver resposta de ${j.quem}</button>`:`<div class="warn">${IC.clock}<span>Esperando resposta. Você pode continuar usando o aplicativo.</span></div>`}
+  ${st==='enviado'?`<button class="btn danger" data-act="desistir">Desistir deste trabalho</button>`:''}
+  <button class="btn quiet" data-home>Voltar ao início</button>`};};
+
+V.chat=()=>{const j=JOBS[jobSel],c=S.chats[jobSel]||[];return {title:j.quem,html:`
+  <div class="warn">${IC.shield}<span>Seu número de telefone não aparece para o contratante. <b>Nunca pague para conseguir um trabalho.</b></span></div>
+  <div class="msgs" id="msgs">${c.map(m=>`<div class="msg ${m.w}">${m.audio?IC.mic.replace('<svg','<svg style="width:18px;height:18px;vertical-align:-3px"')+' Áudio ('+m.audio+')':esc(m.t)}<span class="time">${m.h}</span></div>`).join('')}</div>
+  ${S.cand[jobSel]==='aceito'?`
+  <div class="chips" style="flex-wrap:wrap">${['Sim, estarei aí no horário','Posso chegar 30 min depois?','Como chego aí?','Preciso levar alguma coisa?'].map(t=>`<button class="chip" data-quick="${esc(t)}">${t}</button>`).join('')}</div>
+  <div class="composer"><input id="txt" placeholder="Escreva uma mensagem" aria-label="Mensagem"><button class="round mic" id="bMic" aria-label="Gravar áudio">${IC.mic}</button><button class="round send" id="bSend" aria-label="Enviar">${IC.send}</button></div>
+  <button class="btn primary" data-go="concluir">${IC.check} Terminei o trabalho</button>
+  <button class="btn quiet" data-act="denunciar">${IC.alert} Denunciar problema</button>`:`<div class="warn">${IC.check}<span>Trabalho concluído. Obrigado por avaliar!</span></div>`}`,
+  after(){const m=document.getElementById('msgs');screen.scrollTop=screen.scrollHeight;
+    const t=document.getElementById('txt');if(!t)return;
+    const env=()=>{const v=t.value.trim();if(v){enviar(v);}};
+    document.getElementById('bSend').onclick=env;t.onkeydown=e=>{if(e.key==='Enter')env();};
+    let rec=null,sec=0;const mic=document.getElementById('bMic');
+    mic.onclick=()=>{if(rec){clearInterval(rec);rec=null;mic.classList.remove('rec');const d='0:'+String(Math.max(1,sec)).padStart(2,'0');pushMsg({w:'me',audio:d});resposta('Ouvi seu áudio. Combinado!');}
+      else{sec=0;mic.classList.add('rec');mic.setAttribute('aria-label','Parar e enviar áudio');toast('Gravando áudio… toque de novo para enviar.');rec=setInterval(()=>sec++,1000);}};
+  }};};
+function pushMsg(m){(S.chats[jobSel]=S.chats[jobSel]||[]).push(Object.assign({h:now()},m));save();if(cur==='chat')render();}
+function resposta(t){setTimeout(()=>{pushMsg({w:'them',t});},1100);}
+function enviar(t){pushMsg({w:'me',t});const j=JOBS[jobSel];const r={'Sim, estarei aí no horário':'Combinado! Te espero.','Posso chegar 30 min depois?':'Pode sim, sem problema.','Como chego aí?':`Fica na ${j.end}. Do lado da padaria.`,'Preciso levar alguma coisa?':'Não precisa, só uma roupa que possa sujar.'}[t]||'Certo, combinado!';resposta(r);}
+
+V.concluir=()=>{const j=JOBS[jobSel],a=S.aval[jobSel]||{};return {title:'Trabalho feito',html:`
+  <p class="lead">Você recebeu os ${money(j.v)}?</p>
+  <div class="row"><button class="btn ${a.pago===true?'green':''}" data-pago="1">Sim, recebi</button><button class="btn ${a.pago===false?'green':''}" data-pago="0">Não recebi</button></div>
+  ${a.pago===false?`<div class="warn">${IC.alert}<span>Sentimos muito. Vamos avisar ${j.q} e registrar o problema. Outros trabalhadores verão que houve uma queixa.</span></div><button class="btn danger" data-act="registrarProblema">Registrar problema de pagamento</button>`:''}
+  ${a.pago===true?`<p style="margin:0"><b>Como foi trabalhar com ${j.q}?</b></p>
+  <div class="faces">${[['1','Ruim',IC.sad],['2','Normal',IC.meh],['3','Bom',IC.happy]].map(([k,l,i])=>`<button class="face" aria-pressed="${a.nota===k}" data-nota="${k}">${i}${l}</button>`).join('')}</div>
+  ${a.nota?`<div class="chips" style="flex-wrap:wrap" role="group" aria-label="O que foi bom">${['Pagou certinho','Lugar seguro','Me tratou bem','Horário respeitado'].map(t=>`<button class="chip" aria-pressed="${(a.tags||[]).includes(t)}" data-tag="${t}">${t}</button>`).join('')}</div>`:''}
+  <button class="btn primary" data-act="enviarAval" ${a.nota?'':'disabled'}>Enviar avaliação</button>`:''}`};};
+
+V.pedidos=()=>{const ids=Object.keys(S.cand);return {title:'Meus trabalhos',noBack:true,html:`
+  ${ids.length?ids.map(i=>{const j=JOBS[i],st=S.cand[i];return `<button class="card" data-job="${i}">
+    <div class="job-head"><div class="t">${j.t}</div><span class="pill ${st==='aceito'?'ok':st==='concluido'?'done':'wait'}">${st==='aceito'?'Combinado':st==='concluido'?'Feito':'Esperando'}</span></div>
+    <div class="meta"><span>${IC.clock}${j.h}</span><span>${IC.cash}${money(j.v)}</span><span>${j.q}</span></div></button>`}).join('')
+  :`<div class="done"><div class="badge" style="background:var(--surface-2);color:var(--muted)">${IC.work}</div><p style="margin:0"><b>Você ainda não pediu nenhum trabalho.</b></p><p class="muted" style="margin:0">Os bicos que você pedir aparecem aqui, com a resposta do contratante.</p></div>
+    <button class="btn primary" data-go="trabalhos">Ver trabalhos perto de mim</button>`}`};};
+
+V.ajuda=()=>{
+  let ids=Object.keys(PONTOS).sort((a,b)=>PONTOS[a].dist-PONTOS[b].dist);
+  if(S.tipo!=='todos')ids=ids.filter(i=>PONTOS[i].tipo===S.tipo);
+  return {title:'Ajuda perto de mim',html:`
+  <div class="chips" role="group" aria-label="Tipo de ajuda">${[['todos','Tudo'],['comida','Comida'],['roupas','Roupas'],['abrigo','Abrigo']].map(([k,l])=>`<button class="chip" aria-pressed="${S.tipo===k}" data-tipo="${k}">${l}</button>`).join('')}</div>
+  <div class="row"><button class="btn ${S.vista==='mapa'?'green':'quiet'}" data-vista="mapa">${IC.map} Mapa</button><button class="btn ${S.vista==='lista'?'green':'quiet'}" data-vista="lista">${IC.list} Lista</button></div>
+  ${S.vista==='mapa'?`<div class="map" role="img" aria-label="Mapa do bairro com ${ids.length} pontos de ajuda">${mapaSVG()}
+    <span class="me-dot" style="left:47%;top:50%" title="Você está aqui"></span>
+    ${ids.map(k=>{const p=PONTOS[k],n=Object.keys(PONTOS).sort((a,b)=>PONTOS[a].dist-PONTOS[b].dist).indexOf(k)+1;return `<button class="pin" style="left:${p.x}%;top:${p.y}%" data-ponto="${k}" aria-label="${n}. ${p.t}"><b style="background:${TIPOS[p.tipo][1]}"><span>${n}</span></b></button>`}).join('')}
+  </div><p class="muted small" style="margin:-6px 0 0">O ponto azul é você. Os números do mapa são os mesmos da lista.</p>`:''}
+  ${ids.length?ids.map(k=>{const p=PONTOS[k],n=Object.keys(PONTOS).sort((a,b)=>PONTOS[a].dist-PONTOS[b].dist).indexOf(k)+1;return `<button class="card" data-ponto="${k}">
+    <div class="job-head"><div style="min-width:0"><div class="t">${n}. ${p.t}</div><div>${p.o}</div></div><span class="pill" style="background:${TIPOS[p.tipo][1]};color:#fff">${TIPOS[p.tipo][0]}</span></div>
+    <div class="meta"><span>${IC.pin}${km(p.dist)}</span><span>${IC.clock}${p.h}</span></div></button>`}).join(''):`<p class="muted">Nenhum ponto desse tipo perto de você agora.</p>`}`};
+};
+function mapaSVG(){return `<svg class="base" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <rect width="400" height="300" fill="var(--surface-2)"/>
+  <g fill="var(--surface)" stroke="var(--line)" stroke-width="1.5">
+    <rect x="18" y="16" width="96" height="70" rx="6"/><rect x="134" y="16" width="120" height="70" rx="6"/><rect x="274" y="16" width="108" height="70" rx="6"/>
+    <rect x="18" y="106" width="70" height="88" rx="6"/><rect x="214" y="106" width="70" height="88" rx="6"/><rect x="304" y="106" width="78" height="88" rx="6"/>
+    <rect x="18" y="214" width="136" height="70" rx="6"/><rect x="174" y="214" width="96" height="70" rx="6"/><rect x="290" y="214" width="92" height="70" rx="6"/>
+  </g>
+  <rect x="108" y="106" width="86" height="88" rx="10" fill="var(--green-soft)" stroke="var(--line)"/>
+  <text x="151" y="155" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="sans-serif">Praça</text>
+  <text x="200" y="100" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="sans-serif">Rua das Acácias</text>
+  <text x="98" y="207" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="sans-serif">Av. Central</text>
+</svg>`;}
+
+V.ponto=()=>{const p=PONTOS[pontoSel],on=temLembrete('p-'+pontoSel),d=S.docs['p-'+pontoSel]||[];return {title:p.t,html:`
+  <div><span class="pill" style="background:${TIPOS[p.tipo][1]};color:#fff">${TIPOS[p.tipo][0]}</span><p class="lead" style="margin:8px 0 0">${p.o}</p></div>
+  <div class="kv">${IC.clock}<div><b>${p.h}</b></div>${IC.pin}<div>${p.e}<br><span class="muted">${km(p.dist)} daqui (${walk(p.dist)})</span></div>${IC.list}<div>${p.obs}</div></div>
+  <div><p style="margin:0 0 4px"><b>O que levar</b> <span class="muted small">(marque o que já separou)</span></p>
+  ${p.docs.map((x,i)=>`<label class="check"><input type="checkbox" data-doc="p-${pontoSel}|${i}" ${d.includes(i)?'checked':''}> ${x}</label>`).join('')}</div>
+  <p class="muted small" style="margin:0">Informação atualizada pela instituição ${p.upd}.</p>
+  ${on?`<div class="trust">${IC.bell}<div><b>Lembrete ativado</b><br><span class="small">Vamos avisar 1 hora antes.</span></div></div><button class="btn quiet" data-act="cancelarLembretePonto">Cancelar lembrete</button>`
+      :`<button class="btn primary" data-act="lembretePonto">${IC.bell} Me avisar 1 hora antes</button>`}
+  <a class="btn" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.e)}" target="_blank" rel="noopener">${IC.route} Como chegar</a>`};};
+
+V.direitos=()=>{const temRes=Object.keys(S.resp).length===Q.length;return {title:'Meus direitos',html:`
+  <div class="banner-ill" style="background:var(--blue-soft)">${sv('<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13l2 2 4-4"/>','style="color:var(--blue)"')}<p class="lead" style="margin:0;font-size:1.35em">Descubra se você pode receber ajuda do governo.</p></div>
+  <p style="margin:0">São ${Q.length} perguntas rápidas sobre sua família. Você pode ouvir cada uma tocando em “Ouvir”.</p>
+  <p class="muted small" style="margin:0">Suas respostas ficam só no seu celular.</p>
+  <button class="btn primary" data-act="comecarQ">${temRes?'Responder de novo':'Começar'}</button>
+  ${temRes?`<button class="btn" data-go="resultado">Ver meu último resultado</button>`:''}
+  <button class="btn quiet" data-go="cras">${IC.pin} Ver o CRAS mais perto</button>`};};
+
+V.pergunta=()=>{const q=Q[qIdx];return {title:`Pergunta ${qIdx+1} de ${Q.length}`,html:`
+  <div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="${Q.length}" aria-valuenow="${qIdx+1}"><i style="width:${(qIdx+1)/Q.length*100}%"></i></div>
+  <p class="lead">${q.p}</p>
+  ${q.o.map(([v,l])=>`<button class="btn opt" aria-pressed="${S.resp[q.k]===v}" data-resp="${v}">${l}</button>`).join('')}`};};
+
+function beneficios(){
+  const r=S.resp,pess=+r.pessoas||1,renda=+r.renda;const porPessoa=renda>=9999?9999:renda/pess;const out=[];
+  if(porPessoa<=218||(renda<=600&&pess>=3))out.push(['Bolsa Família','Ajuda em dinheiro todo mês para famílias com renda baixa.',r.criancas==='sim'?'Sua família tem renda baixa e crianças em casa, o que aumenta o valor.':'A renda por pessoa da sua família é baixa.']);
+  if(r.idoso==='sim'&&porPessoa<=400)out.push(['Benefício de Prestação Continuada (BPC)','Um salário mínimo por mês para pessoa idosa ou com deficiência.','Na sua casa tem alguém com 65 anos ou mais ou com deficiência, e a renda é baixa.']);
+  if(porPessoa<=800)out.push(['Desconto na conta de luz','Tarifa Social de Energia: a conta de luz fica mais barata.','Famílias inscritas no Cadastro Único com renda baixa têm direito.']);
+  return out;
+}
+V.resultado=()=>{const b=beneficios();return {title:'Seu resultado',html:`
+  ${b.length?`<p class="lead">Sua família pode ter direito a ${b.length===1?'1 ajuda':b.length+' ajudas'}:</p>
+  ${b.map(([t,o,why])=>`<div class="card flat"><div class="t">${t}</div><div>${o}</div><div class="meta" style="color:var(--blue)"><span>${IC.check}${why}</span></div></div>`).join('')}
+  <div class="warn">${IC.alert}<span>Isto é uma indicação. Quem confirma é o CRAS, no atendimento. Para todas essas ajudas, o primeiro passo é fazer o <b>Cadastro Único</b>.</span></div>
+  <button class="btn primary" data-go="cras">${IC.pin} Onde pedir e o que levar</button>`
+  :`<p class="lead">Pelas suas respostas, não achamos uma ajuda do governo agora.</p><p style="margin:0">Se a renda ou a família mudar, responda de novo. O CRAS também pode te orientar pessoalmente.</p><button class="btn primary" data-go="cras">Ver o CRAS mais perto</button>`}
+  <button class="btn quiet" data-act="comecarQ">Responder de novo</button>`};};
+
+V.cras=()=>{const on=temLembrete('cras'),d=S.docs.cras||[];const docs=['RG ou CPF de todas as pessoas da casa','Comprovante de endereço (conta de luz ou água)','Carteira de trabalho, se tiver','Certidão de nascimento das crianças'];return {title:'CRAS mais perto',html:`
+  <div><p class="lead" style="margin:0">CRAS Vila Esperança</p><p class="muted" style="margin:4px 0 0">Centro de Referência de Assistência Social, onde se faz o Cadastro Único.</p></div>
+  <div class="kv">${IC.pin}<div>Rua Três, 88 – Vila Esperança<br><span class="muted">1,1 km daqui (${walk(1100)})</span></div>${IC.clock}<div>Segunda a sexta, das 8h às 17h<br><span class="muted">Atendimento por ordem de chegada. Chegue cedo.</span></div></div>
+  <div><p style="margin:0 0 4px"><b>O que levar</b> <span class="muted small">(${d.length} de ${docs.length} separados)</span></p>
+  ${docs.map((x,i)=>`<label class="check"><input type="checkbox" data-doc="cras|${i}" ${d.includes(i)?'checked':''}> ${x}</label>`).join('')}</div>
+  ${on?`<div class="trust">${IC.bell}<div><b>Lembrete ativado</b><br><span class="small">Vamos avisar amanhã às 7h.</span></div></div><button class="btn quiet" data-act="cancelarLembreteCras">Cancelar lembrete</button>`
+      :`<button class="btn primary" data-act="lembreteCras">${IC.bell} Me lembrar amanhã cedo</button>`}
+  <a class="btn" href="https://www.google.com/maps/search/?api=1&query=CRAS" target="_blank" rel="noopener">${IC.route} Como chegar</a>`};};
+
+V.aprender=()=>({title:'Aprender',html:`
+  <p class="lead">Cursos curtos e de graça</p>
+  <p class="muted" style="margin:0">Em áudio e vídeo leve, para gastar pouca internet. Você pode baixar e ouvir sem internet.</p>
+  ${Object.entries(CURSOS).map(([k,c])=>{const st=S.cursos[k]||{};return `<button class="card" data-curso="${k}"><div class="job-head"><div class="t">${c.t}</div>${st.feito?`<span class="pill ok">${IC.check}Ouvido</span>`:''}</div>
+    <div class="meta"><span>${c.f==='Áudio'?IC.sound:IC.play}${c.f} · ${c.min} min</span>${st.baixado?`<span>${IC.download}Salvo no celular</span>`:''}</div></button>`}).join('')}`});
+
+let tocando=false;
+V.curso=()=>{const c=CURSOS[cursoSel],st=S.cursos[cursoSel]||{};return {title:'Curso',html:`
+  <p class="lead">${c.t}</p>
+  <div class="player"><div class="meta" style="margin:0;color:var(--ink)"><span>${c.f==='Áudio'?IC.sound:IC.play}${c.f} · ${c.min} min</span></div>
+    <div class="bar"><i id="cbar" style="width:${st.feito?100:0}%"></i></div>
+    <button class="btn green" data-act="tocar">${tocando?IC.stop+' Parar':IC.play+' Ouvir o curso'}</button></div>
+  <p style="margin:0">${c.txt}</p>
+  ${st.baixado?`<div class="trust">${IC.download}<div><b>Salvo no celular</b><br><span class="small">Dá para ouvir mesmo sem internet.</span></div></div>`:`<button class="btn" data-act="baixar">${IC.download} Baixar para ouvir sem internet</button>`}`};};
+
+V.lembretes=()=>({title:'Lembretes',noBack:true,html:`
+  ${S.lembretes.length?S.lembretes.map(l=>`<div class="card flat"><div class="job-head"><div style="min-width:0"><div class="t">${esc(l.titulo)}</div><div class="muted">${esc(l.quando)}</div></div><button class="icon-btn" data-dellemb="${l.id}" aria-label="Apagar lembrete">${sv('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>')}</button></div></div>`).join('')
+  :`<div class="done"><div class="badge" style="background:var(--surface-2);color:var(--muted)">${IC.bell}</div><p style="margin:0"><b>Nenhum lembrete ainda.</b></p><p class="muted" style="margin:0">Quando você pedir para ser avisado de uma doação, de um trabalho ou do CRAS, o lembrete aparece aqui.</p></div>`}`});
+
+let confirmarApagar=false;
+V.ajustes=()=>({title:'Ajustes',noBack:true,html:`
+  <div class="card flat" style="display:flex;gap:12px;align-items:center">${IC.user.replace('<svg','<svg style="width:40px;height:40px"')}<div><b>Roberto</b><br><span class="muted small">CPF ${mask(S.cpf,'cpf')||'—'} · ${mask(S.tel,'tel')||'—'}</span></div></div>
+  <div><div class="setting"><span><b>Tamanho da letra</b></span><div class="seg" role="group" aria-label="Tamanho da letra">${[['0','A'],['1','A+'],['2','A++']].map(([k,l])=>`<button aria-pressed="${prefs.font===k}" data-font="${k}">${l}</button>`).join('')}</div></div>
+  <div class="setting"><span><b>Alto contraste</b><br><span class="muted small">Cores mais fortes para enxergar melhor</span></span><button class="switch" role="switch" aria-checked="${prefs.contraste}" data-act="contraste" aria-label="Alto contraste"></button></div>
+  <div class="setting"><span><b>Bairro</b><br><span class="muted small">${esc(S.local==='gps'?'Vila Esperança (localização)':S.local||'Ainda não escolhido')}</span></span><button class="chip" data-act="trocarLocal">Trocar</button></div></div>
+  <h2 class="sec">Para quem está testando o protótipo</h2>
+  ${confirmarApagar?`<div class="warn">${IC.alert}<span>Isso apaga o cadastro, os pedidos, as conversas e os lembretes deste celular. Quer continuar?</span></div>
+    <div class="row"><button class="btn danger" data-act="apagar">Sim, apagar tudo</button><button class="btn quiet" data-act="naoApagar">Não</button></div>`
+  :`<button class="btn danger" data-act="pedirApagar">Apagar meus dados e começar de novo</button>`}
+  <p class="proto-tag">Perto de Mim · protótipo funcional · dados fictícios</p>`});
+
+/* ---------- Ações ---------- */
+const A={
+  trocarLocal(){pendente=cur;go('local');},
+  candidatar(){S.cand[jobSel]='enviado';save();go('enviada');const id=jobSel,j=JOBS[id];
+    if(j.aceita)setTimeout(()=>{if(S.cand[id]!=='enviado')return;S.cand[id]='aceito';S.chats[id]=[{w:'them',t:`Oi, Roberto! Aqui é ${j.quem}. Pode vir ${j.h.toLowerCase()}?`,h:now()}];
+      addLembrete('j-'+id,`${j.t} – ${j.q}`,j.h);save();render();toast(`${j.quem} aceitou seu pedido!`,'Abrir conversa',()=>{jobSel=id;S.seen[id]=1;save();go('chat');},'top');},3500);},
+  desistir(){delete S.cand[jobSel];save();toast('Você desistiu do trabalho. O contratante foi avisado.');home();},
+  abrirChat(){S.seen[jobSel]=1;save();go('chat');},
+  denunciar(){toast('Denúncia enviada. A equipe vai analisar em até 24 horas.');},
+  registrarProblema(){S.aval[jobSel]={pago:false,problema:true};S.cand[jobSel]='concluido';delLembrete('j-'+jobSel);save();toast('Problema registrado. Vamos entrar em contato.');home();},
+  enviarAval(){S.cand[jobSel]='concluido';delLembrete('j-'+jobSel);save();toast('Obrigado! Sua avaliação ajuda outros trabalhadores.');home();},
+  lembretePonto(){const p=PONTOS[pontoSel];addLembrete('p-'+pontoSel,`${p.o} – ${p.t}`,p.h);render();toast('Lembrete ativado. Vamos avisar 1 hora antes.');},
+  cancelarLembretePonto(){delLembrete('p-'+pontoSel);render();toast('Lembrete cancelado.');},
+  lembreteCras(){addLembrete('cras','Ir ao CRAS fazer o Cadastro Único','Amanhã, às 7h');render();toast('Lembrete ativado.');},
+  cancelarLembreteCras(){delLembrete('cras');render();toast('Lembrete cancelado.');},
+  comecarQ(){qIdx=0;go('pergunta');},
+  tocar(){const c=CURSOS[cursoSel];try{if(!('speechSynthesis' in window))throw 0;if(tocando){speechSynthesis.cancel();tocando=false;render();return;}
+    const u=new SpeechSynthesisUtterance(c.txt);u.lang='pt-BR';u.rate=.95;const total=c.txt.length;
+    u.onboundary=e=>{const b=document.getElementById('cbar');if(b)b.style.width=Math.min(100,e.charIndex/total*100)+'%';};
+    u.onend=()=>{tocando=false;(S.cursos[cursoSel]=S.cursos[cursoSel]||{}).feito=true;save();if(cur==='curso')render();};
+    speechSynthesis.cancel();speechSynthesis.speak(u);tocando=true;render();}catch(e){toast('Este aparelho não consegue tocar o áudio.');}},
+  baixar(){(S.cursos[cursoSel]=S.cursos[cursoSel]||{}).baixado=true;save();render();toast('Curso salvo no celular.');},
+  contraste(){prefs.contraste=!prefs.contraste;applyPrefs();save();render();},
+  pedirApagar(){confirmarApagar=true;render();},
+  naoApagar(){confirmarApagar=false;render();},
+  apagar(){confirmarApagar=false;S=fresh();try{localStorage.removeItem(KEY);}catch(e){}stack=[];cur='boasvindas';render(true);toast('Dados apagados.');},
+};
+
+screen.addEventListener('click',e=>{
+  const el=e.target.closest('button,a,label');if(!el)return;const d=el.dataset;
+  if(d.go){if(d.go==='trabalhos'&&!S.local){pendente='trabalhos';go('local');}else go(d.go);}
+  else if(d.tab)tab(d.tab);
+  else if('home' in d)home();
+  else if(d.act&&A[d.act])A[d.act]();
+  else if(d.job){jobSel=d.job;if(S.cand[d.job]==='aceito')S.seen[d.job]=1;go('vaga');}
+  else if(d.ponto){pontoSel=d.ponto;go('ponto');}
+  else if(d.curso){cursoSel=d.curso;tocando=false;go('curso');}
+  else if(d.filtro){S.filtro=d.filtro;save();render();}
+  else if(d.tipo){S.tipo=d.tipo;save();render();}
+  else if(d.vista){S.vista=d.vista;save();render();}
+  else if(d.quick)enviar(d.quick);
+  else if(d.pago!==undefined){S.aval[jobSel]=Object.assign(S.aval[jobSel]||{},{pago:d.pago==='1'});save();render();}
+  else if(d.nota){S.aval[jobSel].nota=d.nota;save();render();}
+  else if(d.tag){const a=S.aval[jobSel];a.tags=a.tags||[];a.tags=a.tags.includes(d.tag)?a.tags.filter(t=>t!==d.tag):a.tags.concat(d.tag);save();render();}
+  else if(d.resp){const q=Q[qIdx];S.resp[q.k]=d.resp;save();if(qIdx<Q.length-1){qIdx++;render(true);}else{stack=stack.filter(s=>s!=='pergunta');cur='resultado';render(true);}}
+  else if(d.font){prefs.font=d.font;applyPrefs();save();render();}
+  else if(d.dellemb){delLembrete(d.dellemb);render();toast('Lembrete apagado.');}
+});
+screen.addEventListener('change',e=>{const d=e.target.dataset.doc;if(!d)return;const [k,i]=d.split('|');const arr=S.docs[k]=S.docs[k]||[];const n=+i;
+  if(e.target.checked){if(!arr.includes(n))arr.push(n);}else S.docs[k]=arr.filter(x=>x!==n);save();if(cur==='cras')render();});
+
+/* ---------- Renderização ---------- */
+let lastView;
+function renderTop(){
+  const v=lastView;if(!v)return;
+  top.innerHTML=`${v.noBack?'':`<button class="icon-btn ghost" data-nav="back" aria-label="Voltar">${IC.back}</button>`}
+    <h1>${v.title}</h1>
+    <button class="icon-btn" data-nav="ouvir" aria-label="${speaking?'Parar leitura':'Ouvir esta tela'}">${speaking?IC.stop:IC.sound}<span>${speaking?'Parar':'Ouvir'}</span></button>`;
+}
+top.addEventListener('click',e=>{const b=e.target.closest('[data-nav]');if(!b)return;if(b.dataset.nav==='back')back();else falar();});
+
+const TABS=[['inicio','Início',IC.home],['pedidos','Meus trabalhos',IC.work],['lembretes','Lembretes',IC.bell],['ajustes','Ajustes',IC.gear]];
+const tabOf={inicio:'inicio',trabalhos:'inicio',vaga:'inicio',enviada:'inicio',chat:'inicio',concluir:'inicio',ajuda:'inicio',ponto:'inicio',direitos:'inicio',pergunta:'inicio',resultado:'inicio',cras:'inicio',aprender:'inicio',curso:'inicio',local:'inicio',pedidos:'pedidos',lembretes:'lembretes',ajustes:'ajustes'};
+function renderNav(v){
+  nav.hidden=!!v.noNav;if(v.noNav)return;
+  const nv=naoVistos();
+  nav.innerHTML=TABS.map(([k,l,i])=>`<button data-tabnav="${k}" ${tabOf[cur]===k?'aria-current="page"':''}>${i}<span>${l}</span>${k==='pedidos'&&nv?`<span class="dot">${nv}</span>`:''}${k==='lembretes'&&S.lembretes.length?`<span class="dot" style="background:var(--green)">${S.lembretes.length}</span>`:''}</button>`).join('');
+}
+nav.addEventListener('click',e=>{const b=e.target.closest('[data-tabnav]');if(b)tab(b.dataset.tabnav);});
+
+function render(resetScroll){
+  if(!S.logado&&!['boasvindas','codigo'].includes(cur))cur='boasvindas';
+  const v=V[cur]();lastView=v;
+  renderTop();screen.innerHTML=v.html;renderNav(v);
+  if(resetScroll){screen.scrollTop=0;screen.focus({preventScroll:true});}
+  if(v.after)v.after();
+}
+
+/* Erro inesperado: avisa e oferece recomeçar, em vez de travar */
+window.addEventListener('error',()=>{toast('Algo deu errado nesta tela.','Recomeçar',()=>{stack=[];cur=S.logado?'inicio':'boasvindas';render(true);});});
+/* Internet */
+const net=document.getElementById('net');
+function netState(){net.hidden=navigator.onLine!==false;}
+window.addEventListener('online',()=>{netState();toast('Internet de volta.');});
+window.addEventListener('offline',netState);netState();
+
+render(true);
+})();
+</script>
+
+</body>
+</html>
